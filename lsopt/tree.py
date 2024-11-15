@@ -1,4 +1,3 @@
-
 """
 This module gathers Large Scale Optimal Tree methods, including
 optimal classification tree and optimal classification tree with hyperplanes
@@ -21,6 +20,7 @@ from ._base import solve_oct_MILP, solve_oct_MILP_OLD, ModelTree, get_solution_f
 from ._base import solve_oct_MILP_BIN, ModelBinTree
 from ._base import _check_preprocess_X_y, _check_preprocess_X_y_BIN, _check_parameters, _check_configure_solver
 from ._base import _check_is_fitted
+
 
 # from sklearn.metrics import confusion_matrix
 # from sklearn.metrics import classification_report
@@ -335,8 +335,15 @@ class OptimalTreeClassifier:
 
         # Check and preprocess X, y
         X_transformed, y_transformed, class_names, \
-            L_hat, epsilons, scaler_X, feature_removed_idx =\
+            L_hat, epsilons, scaler_X, feature_removed_idx = \
             _check_preprocess_X_y(X=X, y=y)
+
+        ########################################
+        # To delete later
+        X_transformed = X.copy()
+        epsilons = np.array([0.0638267999999, 0.00981810000])
+
+        ###################################
 
         self.classes_ = class_names
 
@@ -779,7 +786,7 @@ class BinNodePenaltyOptimalTreeClassifier:
 
         # Check and preprocess X, y
         X_transformed, y_transformed, feature_thresholds, class_names, \
-            L_hat, epsilons, scaler_X, feature_removed_idx =\
+            L_hat, epsilons, scaler_X, feature_removed_idx = \
             _check_preprocess_X_y_BIN(X=X, y=y, normalize_x=False)
 
         self.classes_ = class_names
@@ -1227,7 +1234,7 @@ class OldOptimalTreeClassifier:
 
         # Check and preprocess X, y
         X_transformed, y_transformed, class_names, \
-            L_hat, epsilons, scaler_X, feature_removed_idx =\
+            L_hat, epsilons, scaler_X, feature_removed_idx = \
             _check_preprocess_X_y(X=X, y=y)
 
         self.classes_ = class_names

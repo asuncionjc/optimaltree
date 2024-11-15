@@ -20,6 +20,8 @@ from sklearn.utils import check_array
 from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 from ._exceptions import NotFittedError
+
+
 # from _exceptions import NotFittedError
 
 
@@ -127,6 +129,7 @@ def _get_ancestors_df(node):
 
     return ancestors_df
 
+
 # %%
 
 
@@ -178,6 +181,7 @@ def _get_pair_nodes_ancestors(nodes):
 
     return pair_nodes_left_ancestors, pair_nodes_right_ancestors
 
+
 # %%
 
 
@@ -210,6 +214,7 @@ def _get_pair_nodes_parents(nodes):
         pair_branch_nodes_parents.append(pair)
 
     return pair_branch_nodes_parents
+
 
 # %%
 
@@ -253,11 +258,11 @@ def _get_tree_nodes_set(max_depth):
     nodes_set : a dict of shape {'branch nodes': [], 'leaf nodes': []}
         A dict contains branch nodes set, leaf nodes set
     """
-    total_number_nodes = np.power(2, max_depth+1) - 1
-    temp = math.floor(total_number_nodes/2)
+    total_number_nodes = np.power(2, max_depth + 1) - 1
+    temp = math.floor(total_number_nodes / 2)
 
-    branch_nodes_set = list(range(1, temp+1))
-    leaf_nodes_set = list(range(temp+1, total_number_nodes+1))
+    branch_nodes_set = list(range(1, temp + 1))
+    leaf_nodes_set = list(range(temp + 1, total_number_nodes + 1))
     # all_nodes_set = list(range(1, total_number_nodes+1))
 
     nodes_set = {'branch nodes': branch_nodes_set,
@@ -317,6 +322,7 @@ def _get_baseloss(Y_vec):
     n_common = counts.max()
     L_hat = n_total - n_common
     return L_hat
+
 
 # %%
 
@@ -412,6 +418,7 @@ def _transform_y(Y_vec, neg_label=-1, pos_label=1):
         Y_vec_transform = temp
 
     return Y_vec_transform, classes
+
 
 # %%
 
@@ -542,8 +549,8 @@ def _get_threshold_value(model, X_mat, feature_thresholds, feature_idx, node):
     """Get the split's threshold value from the solved model
     """
     n_thresholds = _get_num_constants(
-        feature_thresholds=feature_thresholds, feature_idx=feature_idx-1)
-    bin_ranges = _get_binbin_ranges(0, n_thresholds-1)
+        feature_thresholds=feature_thresholds, feature_idx=feature_idx - 1)
+    bin_ranges = _get_binbin_ranges(0, n_thresholds - 1)
 
     threshold_value = 0
     for _bin in bin_ranges:
@@ -557,7 +564,7 @@ def _get_threshold_value(model, X_mat, feature_thresholds, feature_idx, node):
                         found = 1
                 if not found:
                     thresh_idx = _bin[1][0]
-                    threshold_value = feature_thresholds[feature_idx-1][thresh_idx]
+                    threshold_value = feature_thresholds[feature_idx - 1][thresh_idx]
 
         if _bin[2][0] == _bin[2][1]:
             r_max = len(_bin[0]) + 1
@@ -569,11 +576,11 @@ def _get_threshold_value(model, X_mat, feature_thresholds, feature_idx, node):
                         found = 1
                 if not found:
                     thresh_idx = _bin[2][0]
-                    threshold_value = feature_thresholds[feature_idx-1][thresh_idx]
+                    threshold_value = feature_thresholds[feature_idx - 1][thresh_idx]
 
     if len(bin_ranges) == 0:
         threshold_value = 0.5 * \
-            (X_mat[:, feature_idx-1].max() + X_mat[:, feature_idx-1].min())
+                          (X_mat[:, feature_idx - 1].max() + X_mat[:, feature_idx - 1].min())
 
     return threshold_value
 
@@ -617,7 +624,7 @@ def _get_dict_feature_j_point_i_bin_r(X_mat, feature_thresholds, kind='right'):
             idx_feature = j + 1  # The index starts from 1 (not 0)
             n_thresholds = _get_num_constants(
                 feature_thresholds=feature_thresholds, feature_idx=j)
-            bin_ranges = _get_binbin_ranges(0, n_thresholds-1)
+            bin_ranges = _get_binbin_ranges(0, n_thresholds - 1)
 
             bin_count = 0
             inner_dict = {}
@@ -634,10 +641,10 @@ def _get_dict_feature_j_point_i_bin_r(X_mat, feature_thresholds, kind='right'):
                 idx_points = idx_points + 1  # The index starts from 1 (not 0)
 
                 # get indexes of threshold binary encoding
-                idx_bin_encoding = [len(_bin[0])+1]
+                idx_bin_encoding = [len(_bin[0]) + 1]
                 for r in range(len(_bin[0])):
                     if _bin[0][r] is 1:
-                        idx_bin_encoding.append(r+1)
+                        idx_bin_encoding.append(r + 1)
 
                 inner_dict[bin_count] = {'points': idx_points,
                                          'bin_encoding': idx_bin_encoding}
@@ -649,7 +656,7 @@ def _get_dict_feature_j_point_i_bin_r(X_mat, feature_thresholds, kind='right'):
             idx_feature = j + 1  # The index starts from 1 (not 0)
             n_thresholds = _get_num_constants(
                 feature_thresholds=feature_thresholds, feature_idx=j)
-            bin_ranges = _get_binbin_ranges(0, n_thresholds-1)
+            bin_ranges = _get_binbin_ranges(0, n_thresholds - 1)
 
             bin_count = 0
             inner_dict = {}
@@ -666,10 +673,10 @@ def _get_dict_feature_j_point_i_bin_r(X_mat, feature_thresholds, kind='right'):
                 idx_points = idx_points + 1  # The index starts from 1 (not 0)
 
                 # get indexes of threshold binary encoding
-                idx_bin_encoding = [len(_bin[0])+1]
+                idx_bin_encoding = [len(_bin[0]) + 1]
                 for r in range(len(_bin[0])):
                     if _bin[0][r] is 0:
-                        idx_bin_encoding.append(r+1)
+                        idx_bin_encoding.append(r + 1)
 
                 inner_dict[bin_count] = {'points': idx_points,
                                          'bin_encoding': idx_bin_encoding}
@@ -788,6 +795,7 @@ def _get_pair_feature_j_binrange_q(pair_dict, kind='right'):
 
     return pair_list
 
+
 # %%
 
 
@@ -860,6 +868,7 @@ def _transform_array2dict(array):
         array_transformed[index_new] = value
 
     return array_transformed
+
 
 # %%
 
@@ -971,6 +980,7 @@ def _check_preprocess_X_y(X, y):
 
     return X_transformed, y_transformed, class_names, L_hat, epsilons, scaler_X, feature_removed_idx
 
+
 # %%
 # %%
 
@@ -1065,6 +1075,7 @@ def _check_preprocess_X_y_BIN(X, y, normalize_x=False):
     feature_thresholds = _get_feature_thresholds(X_mat=X_transformed, Y_vec=y)
 
     return X_transformed, y_transformed, feature_thresholds, class_names, L_hat, epsilons, scaler_X, feature_removed_idx
+
 
 # %%
 
@@ -1305,14 +1316,14 @@ def _check_configure_solver(solver, return_config=True, **kwargs):
     mip_polish_time = kwargs.pop('mip_polish_time', None)
 
     if mip_polish_time:
-        mip_polish_time = 60*mip_polish_time
+        mip_polish_time = 60 * mip_polish_time
 
     # Check time_limit
     if not isinstance(time_limit, numbers.Integral) or time_limit <= 0:
         raise ValueError("'time_limit' must be integer value greater than 0.")
 
     # time limit in seconds
-    time_limit = 60*time_limit
+    time_limit = 60 * time_limit
 
     # Check mip_cuts
     if mip_cuts:
@@ -1511,6 +1522,7 @@ def _check_configure_solver(solver, return_config=True, **kwargs):
 
         return solver_configured
 
+
 # %%
 
 
@@ -1548,6 +1560,7 @@ def _check_solver_termination(solver_results):
                            " Check here: http://www.pyomo.org/blog/2015/1/8/accessing-solver"
                            .format(solver_status, solver_termination_condition))
 
+
 # %%
 
 
@@ -1578,7 +1591,6 @@ def _check_solution(model_solved):
 
 
 def get_solution_from_CART(X, y, scaler_X, max_depth, min_samples_leaf):
-
     tree_clf = tree.DecisionTreeClassifier(
         max_depth=max_depth, criterion="gini", min_samples_leaf=min_samples_leaf)
 
@@ -1608,7 +1620,7 @@ def get_solution_from_CART(X, y, scaler_X, max_depth, min_samples_leaf):
     a = {}
     for j in range(n_features):
         for m in branch_nodes:
-            a[(j+1, m)] = 0
+            a[(j + 1, m)] = 0
 
     # b[m] threshold values at branch node m
     # b = np.zeros((n_branch_nodes,), dtype=float)
@@ -1622,7 +1634,7 @@ def get_solution_from_CART(X, y, scaler_X, max_depth, min_samples_leaf):
     z = {}
     for i in range(n_samples):
         for t in leaf_nodes:
-            z[(i+1, t)] = 0
+            z[(i + 1, t)] = 0
 
     # l[t] if leaf node t contain points
     # l = np.zeros((n_leaf_nodes, ), dtype=int)
@@ -1683,7 +1695,7 @@ def get_solution_from_CART(X, y, scaler_X, max_depth, min_samples_leaf):
                 feature_idx = tree_clf.tree_.feature[node_idx]
                 threshold_value = tree_clf.tree_.threshold[node_idx]
                 d[node] = 1
-                a[(feature_idx+1, node)] = 1
+                a[(feature_idx + 1, node)] = 1
 
                 b_vector = np.zeros((1, n_features), dtype=float)
                 b_vector[0, feature_idx] = threshold_value
@@ -1739,16 +1751,16 @@ def get_solution_from_CART(X, y, scaler_X, max_depth, min_samples_leaf):
             class_prediction[np.argmax(value)] = 1
 
             for k in range(n_class):
-                NN[k+1, t] = value[k]
-                c[k+1, t] = class_prediction[k]
+                NN[k + 1, t] = value[k]
+                c[k + 1, t] = class_prediction[k]
 
         else:
             l[t] = 0
             Loss[t] = 0
             N[t] = 0
             for k in range(n_class):
-                NN[(k+1, t)] = 0
-                c[(k+1, t)] = 0
+                NN[(k + 1, t)] = 0
+                c[(k + 1, t)] = 0
 
     for i in range(n_samples):
         node_idx = 0
@@ -1766,7 +1778,7 @@ def get_solution_from_CART(X, y, scaler_X, max_depth, min_samples_leaf):
                 node_idx = tree_clf.tree_.children_right[node_idx]
 
         node = node_active[node_idx_active.index(node_idx)]
-        z[(i+1, node)] = 1
+        z[(i + 1, node)] = 1
 
     return a, b, d, z, l, c, Loss, NN, N
 
@@ -2186,7 +2198,7 @@ def solve_oct_MILP(X_transformed, y_transformed, L_hat, epsilons,
 
     # ======================== Define Objective ===============================
     def obj_rule(model):
-        model_loss = 1/model.L_hat * sum(model.Loss[t] for t in model.tL)
+        model_loss = 1 / model.L_hat * sum(model.Loss[t] for t in model.tL)
         model_complexity = model.alpha * sum(model.d[t] for t in model.tB)
         return model_loss + model_complexity
 
@@ -2232,9 +2244,9 @@ def solve_oct_MILP(X_transformed, y_transformed, L_hat, epsilons,
     def split_right_cons(model, i, t, m):
         # i in model.I, t and m in model.tL_AR pair which represent (leaf node, right ancestor node)
         # left hand side
-        lhs = sum(model.X[i, j]*model.a[j, m] for j in model.J)
+        lhs = sum(model.X[i, j] * model.a[j, m] for j in model.J)
         # right hand side
-        rhs = model.b[m] - (1-model.z[i, t])
+        rhs = model.b[m] - (1 - model.z[i, t])
         return lhs >= rhs
 
     model.SplitRightConstraint = pyo.Constraint(model.I, model.tL_AR,
@@ -2243,14 +2255,14 @@ def solve_oct_MILP(X_transformed, y_transformed, L_hat, epsilons,
     def split_left_cons(model, i, t, m):
         # i in model.I, t and m in model.tL_AL pair which represent (leaf node, left ancestor node)
         # left hand side
-        lhs = sum(model.X[i, j]*model.a[j, m]
-                  for j in model.J) + model.epsilon_min
-
-        # lhs = sum((model.X[i, j] + model.epsilons[j])*model.a[j, m]
-        #           for j in model.J)
+        # lhs = sum(model.X[i, j] * model.a[j, m]
+        #           for j in model.J) + model.epsilon_min
+        # To change later
+        lhs = sum((model.X[i, j] + model.epsilons[j])*model.a[j, m]
+                  for j in model.J)
 
         # right hand side
-        rhs = model.b[m] + (1-model.z[i, t])*(1 + model.epsilon_max)
+        rhs = model.b[m] + (1 - model.z[i, t]) * (1 + model.epsilon_max)
         return lhs <= rhs
 
     model.SplitLeftConstraint = pyo.Constraint(model.I, model.tL_AL,
@@ -2412,7 +2424,6 @@ def solve_oct_MILP(X_transformed, y_transformed, L_hat, epsilons,
         # Although feasible or optimal, if d[1] == 0 which means there is no splits,
         # fixing the root node has split : d[1] == 1
         if pyo.value(model.d[1]) == 0:
-
             warnings.warn("'alpha' complexity parameter maybe too large to "
                           " form a tree with valid splits."
                           " The algorithm will enforce to split at the node 1 and resolve the model."
@@ -2435,6 +2446,7 @@ def solve_oct_MILP(X_transformed, y_transformed, L_hat, epsilons,
     _check_solution(model_solved=model)
 
     return model, solver_results.solver.time, solver_results.solver.termination_condition
+
 
 # %%
 
@@ -2697,7 +2709,7 @@ def solve_oct_MILP_BIN(X_transformed, y_transformed, feature_thresholds, L_hat, 
 
     n_max_possible_thresholds = _get_max_num_constants(feature_thresholds)
     n_max_bin = 1 + \
-        int(math.log(max(1, n_max_possible_thresholds)) / math.log(2.))
+                int(math.log(max(1, n_max_possible_thresholds)) / math.log(2.))
 
     # Get the dictionary mapping for feature j, bin range q, and binary encoding r
 
@@ -2887,7 +2899,7 @@ def solve_oct_MILP_BIN(X_transformed, y_transformed, feature_thresholds, L_hat, 
 
     # ======================== Define Objective ===============================
     def obj_rule(model):
-        model_loss = 1/model.L_hat * sum(model.Loss[t] for t in model.tL)
+        model_loss = 1 / model.L_hat * sum(model.Loss[t] for t in model.tL)
         model_complexity = model.alpha * sum(model.d[t] for t in model.tB)
         return model_loss + model_complexity
 
@@ -2957,7 +2969,7 @@ def solve_oct_MILP_BIN(X_transformed, y_transformed, feature_thresholds, L_hat, 
         n_points = len(i_list)
 
         lhs = sum(model.z[i, t] for i in i_list) + n_points * model.a[j, m] - \
-            n_points * sum(model.b[m, r] for r in r_list)
+              n_points * sum(model.b[m, r] for r in r_list)
         rhs = n_points
 
         return lhs <= rhs
@@ -2993,7 +3005,7 @@ def solve_oct_MILP_BIN(X_transformed, y_transformed, feature_thresholds, L_hat, 
         n_bin_0 = len(r_list) - 1
 
         lhs = sum(model.z[i, t] for i in i_list) + n_points * model.a[j, m] + \
-            n_points * sum(model.b[m, r] for r in r_list)
+              n_points * sum(model.b[m, r] for r in r_list)
         rhs = n_points * (2 + n_bin_0) * model.d[m]
 
         return lhs <= rhs
@@ -3213,7 +3225,6 @@ def solve_oct_MILP_BIN(X_transformed, y_transformed, feature_thresholds, L_hat, 
         # Although feasible or optimal, if d[1] == 0 which means there is no splits,
         # fixing the root node has split : d[1] == 1
         if pyo.value(model.d[1]) == 0:
-
             warnings.warn("'alpha' complexity parameter maybe too large to "
                           " form a tree with valid splits."
                           " The algorithm will enforce to split at the node 1 and resolve the model."
@@ -3236,6 +3247,7 @@ def solve_oct_MILP_BIN(X_transformed, y_transformed, feature_thresholds, L_hat, 
     _check_solution(model_solved=model)
 
     return model, solver_results.solver.time, solver_results.solver.termination_condition
+
 
 # %%
 
@@ -3603,7 +3615,7 @@ def solve_oct_MILP_OLD(X_transformed, y_transformed, L_hat, epsilons,
 
     # ======================== Define Objective ===============================
     def obj_rule(model):
-        model_loss = 1/model.L_hat * sum(model.Loss[t] for t in model.tL)
+        model_loss = 1 / model.L_hat * sum(model.Loss[t] for t in model.tL)
         model_complexity = model.alpha * sum(model.d[t] for t in model.tB)
         return model_loss + model_complexity
 
@@ -3649,9 +3661,9 @@ def solve_oct_MILP_OLD(X_transformed, y_transformed, L_hat, epsilons,
     def split_right_cons(model, i, t, m):
         # i in model.I, t and m in model.tL_AR pair which represent (leaf node, right ancestor node)
         # left hand side
-        lhs = sum(model.X[i, j]*model.a[j, m] for j in model.J)
+        lhs = sum(model.X[i, j] * model.a[j, m] for j in model.J)
         # right hand side
-        rhs = model.b[m] - (1-model.z[i, t])
+        rhs = model.b[m] - (1 - model.z[i, t])
         return lhs >= rhs
 
     model.SplitRightConstraint = pyo.Constraint(model.I, model.tL_AR,
@@ -3661,19 +3673,19 @@ def solve_oct_MILP_OLD(X_transformed, y_transformed, L_hat, epsilons,
         # i in model.I, t and m in model.tL_AL pair which represent (leaf node, left ancestor node)
         # left hand side
         if epsilon_option == 1:
-            lhs = sum((model.X[i, j] + model.epsilons[j])*model.a[j, m]
+            lhs = sum((model.X[i, j] + model.epsilons[j]) * model.a[j, m]
                       for j in model.J)
 
         elif epsilon_option == 2:
-            lhs = sum(model.X[i, j]*model.a[j, m]
+            lhs = sum(model.X[i, j] * model.a[j, m]
                       for j in model.J) + model.epsilon_min
 
         elif epsilon_option == 3:
-            lhs = sum(model.X[i, j]*model.a[j, m]
+            lhs = sum(model.X[i, j] * model.a[j, m]
                       for j in model.J) + temp_small_number
 
         # right hand side
-        rhs = model.b[m] + (1-model.z[i, t])*(1 + model.epsilon_max)
+        rhs = model.b[m] + (1 - model.z[i, t]) * (1 + model.epsilon_max)
         return lhs <= rhs
 
     model.SplitLeftConstraint = pyo.Constraint(model.I, model.tL_AL,
@@ -3835,7 +3847,6 @@ def solve_oct_MILP_OLD(X_transformed, y_transformed, L_hat, epsilons,
         # Although feasible or optimal, if d[1] == 0 which means there is no splits,
         # fixing the root node has split : d[1] == 1
         if pyo.value(model.d[1]) == 0:
-
             warnings.warn("'alpha' complexity parameter maybe too large to "
                           " form a tree with valid splits."
                           " The algorithm will enforce to split at the node 1 and resolve the model."
@@ -3885,7 +3896,7 @@ def _get_depth(node, max_depth):
     if node == 1:
         return 0
 
-    node_max_idx = math.pow(2, max_depth+1) - 1
+    node_max_idx = math.pow(2, max_depth + 1) - 1
     if node > node_max_idx:
         raise ValueError("'node' index out of range for a tree with"
                          " maximum depth {}. "
@@ -3896,13 +3907,14 @@ def _get_depth(node, max_depth):
     depth = 1
     while depth <= max_depth:
         most_left_node = math.pow(2, depth)
-        most_right_node = math.pow(2, depth+1) - 1
+        most_right_node = math.pow(2, depth + 1) - 1
         if node >= most_left_node and node <= most_right_node:
             break
         else:
             depth += 1
 
     return depth
+
 
 # %%
 
@@ -3940,6 +3952,7 @@ def _get_child(node, direction):
         child = node * 2 + 1
 
     return child
+
 
 # %%
 
@@ -4064,8 +4077,8 @@ def _get_gini(value):
     if sum_ == 0:
         sum_ = 1
 
-    prob = value/sum_
-    gini = prob * (1-prob)
+    prob = value / sum_
+    gini = prob * (1 - prob)
     gini = gini.sum()
 
     return gini
@@ -4093,6 +4106,7 @@ def _get_gini_array(value):
 
     return gini
 
+
 # %%
 
 
@@ -4118,7 +4132,7 @@ def _get_entropy(value):
     if sum_ == 0:
         sum_ = 1
 
-    prob = value/sum_
+    prob = value / sum_
     prob[prob == 0] = 1
 
     entropy = -1 * prob * np.log2(prob)
@@ -4148,6 +4162,8 @@ def _get_entropy_array(value):
             "The current version does not support value with multi-outputs.")
 
     return entropy
+
+
 # %%
 
 
@@ -4198,6 +4214,7 @@ def _apply_split(X_transformed, y_transformed, feature, threshold, direction):
     value = np.apply_along_axis(np.sum, axis=0, arr=y_remain)
 
     return X_remain, y_remain, value
+
 
 # %%
 
@@ -4262,6 +4279,8 @@ def _get_value(node, X, y, nodes_active, feature_, threshold_):
                                            direction="right")
 
     return value
+
+
 # %%
 
 
@@ -4470,7 +4489,6 @@ class ModelTree:
         # extreme small numerical issue in the OCT tree contraints such that
         # the number of nodes_active is not equal to the branch nodes + leaf nodes
         if len(nodes_active) != node_count:
-
             node_count = len(nodes_active)
 
             # raise RuntimeError("Tree is not constructed properly. "
@@ -4552,15 +4570,15 @@ class ModelTree:
                 for j in model_J_set:
                     if round(self.model.a[j, node].value) == 1.0:
                         # feature index for splitting
-                        features_[idx] = j-1
+                        features_[idx] = j - 1
                         # threshold value
                         b_value = self.model.b[node].value
-                        b_vector[0, j-1] = b_value
+                        b_vector[0, j - 1] = b_value
                         threshold_scaled_[idx] = b_value
                         # recover threshold to the original scale X
                         b_vector = self.scaler_X.inverse_transform(b_vector)
-                        b_vector[0, j-1] = round(b_vector[0, j-1], 5)
-                        threshold_[idx] = b_vector[0, j-1]
+                        b_vector[0, j - 1] = round(b_vector[0, j - 1], 5)
+                        threshold_[idx] = b_vector[0, j - 1]
                         break
 
             if node in leaf_nodes_active:
@@ -4604,7 +4622,7 @@ class ModelTree:
         self.weighted_n_node_samples = weighted_n_node_samples_
         self.impurity = impurity_
 
-        return(self)
+        return (self)
 
     def predict(self, X, kind=None):
         """Finds the terminal region (e.g., leaf node `i`) for each sample in X
@@ -4684,6 +4702,7 @@ class ModelTree:
                 return prediction
         else:
             return prediction
+
 
 # %%
 
@@ -4895,7 +4914,6 @@ class ModelBinTree:
         # extreme small numerical issue in the OCT tree contraints such that
         # the number of nodes_active is not equal to the branch nodes + leaf nodes
         if len(nodes_active) != node_count:
-
             node_count = len(nodes_active)
             # raise RuntimeError("Tree is not constructed properly. "
             #                    "Please check `model.SplitLeftConstraint` in solve_oct_MILP()")
@@ -4976,7 +4994,7 @@ class ModelBinTree:
                 for j in model_J_set:
                     if round(self.model.a[j, node].value) == 1.0:
                         # feature index for splitting
-                        features_[idx] = j-1
+                        features_[idx] = j - 1
                         # threshold value
                         b_value = _get_threshold_value(model=self.model,
                                                        X_mat=X_transformed,
@@ -4985,13 +5003,13 @@ class ModelBinTree:
                                                        node=node
                                                        )
 
-                        b_vector[0, j-1] = b_value
+                        b_vector[0, j - 1] = b_value
                         threshold_scaled_[idx] = b_value
                         # recover threshold to the original scale X
                         if self.scaler_X:
                             b_vector = self.scaler_X.inverse_transform(
                                 b_vector)
-                        threshold_[idx] = b_vector[0, j-1]
+                        threshold_[idx] = b_vector[0, j - 1]
                         break
 
             if node in leaf_nodes_active:
@@ -5036,7 +5054,7 @@ class ModelBinTree:
         self.weighted_n_node_samples = weighted_n_node_samples_
         self.impurity = impurity_
 
-        return(self)
+        return (self)
 
     def predict(self, X, kind=None):
         """Finds the terminal region (e.g., leaf node `i`) for each sample in X
@@ -5185,6 +5203,7 @@ def _check_is_fitted(estimator, attributes=None, msg=None, all_or_any=all):
 
     if not attrs:
         raise NotFittedError(msg)
+
 
 # %%
 
